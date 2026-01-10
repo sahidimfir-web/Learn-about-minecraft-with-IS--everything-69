@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Portal</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'minecraftia', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #2d2d2d;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 350px;
+        }
+        .btn-launch {
+            background-color: #388e3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        .btn-launch:hover { background-color: #45a049; }
+        .status-badge {
+            margin: 15px 0;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        .online { background: #2e7d32; }
+        .offline { background: #c62828; }
+        #player-count { font-size: 1.1rem; color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Server Portal</h2>
+        
+        <div id="status-container">
+            <div id="status-light" class="status-badge offline">Checking...</div>
+            <p id="player-count">Players: --</p>
+        </div>
+
+        <a href="minecraft://" class="btn-launch">Launch Minecraft</a>
+        
+        <p style="font-size: 0.7rem; color: #666; margin-top: 15px;">
+            Note: "Launch" works for Bedrock Edition automatically.
+        </p>
+    </div>
+
+    <script>
+        // REPLACE THIS with your server IP (e.g., 'play.hypixel.net')
+        const SERVER_IP = 'mc.hypixel.net'; 
+
+        async function updateStatus() {
+            try {
+                const response = await fetch(`https://api.mcstatus.io/v2/status/java/${SERVER_IP}`);
+                const data = await response.json();
+
+                const statusLight = document.getElementById('status-light');
+                const playerCount = document.getElementById('player-count');
+
+                if (data.online) {
+                    statusLight.textContent = "Online";
+                    statusLight.className = "status-badge online";
+                    playerCount.textContent = `Players: ${data.players.online} / ${data.players.max}`;
+                } else {
+                    statusLight.textContent = "Offline";
+                    statusLight.className = "status-badge offline";
+                    playerCount.textContent = "Server is down";
+                }
+            } catch (error) {
+                console.error("Failed to fetch status:", error);
+            }
+        }
+
+        // Update every 30 seconds
+        updateStatus();
+        setInterval(updateStatus, 30000);
+    </script>
+</body>
+</html>

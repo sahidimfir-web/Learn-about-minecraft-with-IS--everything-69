@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC Version Live-Feed</title>
+    <style>
+        :root {
+            --mc-green: #3c8527;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--mc-green);
+            margin: 0;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .version-card {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid #333;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .version-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #2a2a2a;
+            transition: background 0.2s;
+        }
+
+        .version-row:hover {
+            background: #252525;
+        }
+
+        .version-id {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .version-date {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .release { background: var(--mc-green); color: white; }
+        .snapshot { background: #d32f2f; color: white; }
+        .old_alpha, .old_beta { background: #555; color: #ccc; }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--mc-green);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Minecraft Live Manifest</h1>
+        <p>Technical Version Tracker (2026 Engine)</p>
+    </div>
+
+    <div class="version-card" id="manifest-container">
+        <div class="loading">SYNCING WITH MOJANG...
+        <a href="minecraftwiki.edgeone.dev">Or go home</a></div>
+    </div>
+</div>
+
+<script>
+    async function updateManifest() {
+        const API = 'https://launchermeta.mojang.com/mc/game/version_manifest.json';
+        const container = document.getElementById('manifest-container');
+
+        try {
+            const response = await fetch(API);
+            const data = await response.json();
+            
+            // Generate HTML for the last 25 versions
+            let html = '';
+            data.versions.slice(0, 25).forEach(v => {
+                const date = new Date(v.releaseTime).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                html += `
+                    <div class="version-row">
+                        <div>
+                            <div class="version-id">${v.id}</div>
+                            <div class="version-date">${date}</div>
+                        </div>
+                        <span class="badge ${v.type}">${v.type.replace('_', ' ')}</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        } catch (error) {
+            container.innerHTML = '<div class="loading" style="color: red;">ERROR: Could not connect to Minecraft servers.</div>';
+        }
+    }
+
+    // Run on load
+    updateManifest();
+    // Auto-refresh every 10 minutes while page is open
+    setInterval(updateManifest, 600000);
+</script>
+
+</body>
+</html>

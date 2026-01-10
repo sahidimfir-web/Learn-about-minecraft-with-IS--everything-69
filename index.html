@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Learn about minecraft with IS -everything</title>
+
+<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Minecraftia', Arial;
+  color:#fff;
+  transition:background .5s;
+}
+
+/* THEMES */
+body.First{
+  background:
+    linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
+    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpvSsQ4brd1OU27E0Fr8j1XLyQkSXsIqt9h-_Z8KkPIwV94kT3U5-aPt4&s")";
+  background-size:cover;
+  background-attachment:fixed;
+}
+
+body.Second{
+  background:
+    linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
+    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsALmnFfOFlgscJihrlmwGYu8iiwBaeWcWlprAfDqM-E5icRoQgfPv-dg&s");
+  background-size:cover;
+  background-attachment:fixed;
+}
+
+/* HEADER */
+header{
+  background:#000;
+  padding:15px;
+  text-align:center;
+  position:sticky;
+  top:0;
+}
+
+nav a{
+  color:#fff;
+  margin:0 10px;
+  text-decoration:none;
+}
+
+/* BUTTON */
+.mc-btn{
+  background:#3fa93f;
+  border:3px solid #1e5e1e;
+  padding:8px 16px;
+  color:#fff;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 4px #154315;
+}
+.mc-btn:active{
+  transform:translateY(3px);
+  box-shadow:0 1px #154315;
+}
+
+/* THEME BUTTONS */
+.theme-box{
+  margin-top:10px;
+}
+.theme-btn{
+  margin:5px;
+}
+
+/* SECTIONS */
+section{
+  background:rgba(0,0,0,.7);
+  margin:20px;
+  padding:20px;
+  border-radius:10px;
+  animation:fade 1s;
+}
+@keyframes fade{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1}
+}
+
+.box{
+  border:2px solid #3fa93f;
+  padding:15px;
+  margin:15px 0;
+  border-radius:10px;
+}
+
+img{
+  max-width:100%;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  background:#000;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>⛏ Minecraft Hub</h1>
+
+<nav>
+<a href="#about">About</a>
+<a href="#dimensions">Dimensions</a>
+<a href="#versions">Versions</a>
+<a href="launch minecraft.html">Launch minecraft</a>
+<a href="updates.html">updates</a>
+
+</nav>
+
+<!-- THEME CHANGER -->
+<div class="theme-box">
+<button class="mc-btn theme-btn" onclick="setTheme('overworld')">🌿 Overworld</button>
+<button class="mc-btn theme-btn" onclick="setTheme('nether')">🔥 Nether</button>
+</div>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+<h2>🧱 What is Minecraft?</h2>
+<p>
+Minecraft is a sandbox game by Mojang Studios where players explore,
+build, craft, and survive in a procedurally generated block world.
+</p>
+
+<div class="box">
+<h3>🌍 World Generation</h3>
+<p>
+Infinite worlds with biomes, villages, caves, oceans, and structures.
+</p>
+<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/wp-1759678964304.jpg">
+</div>
+</section>
+
+<!-- DIMENSIONS -->
+<section id="dimensions">
+<h2>🔥 Minecraft Dimensions</h2>
+
+<div class="box">
+<h3>🌿 Overworld</h3>
+<p>Main dimension for survival and building.</p>
+</div>
+
+<div class="box">
+<h3>🔥 Nether</h3>
+<p>Dangerous lava-filled dimension with unique mobs and resources.</p>
+<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/09/screenshot_2025-09-04-20-43-20-7397320848285354765019.jpeg">
+</div>
+
+<div class="box">
+<h3>⚫ The End</h3>
+<p>End-game dimension where the Ender Dragon lives.</p>
+</div>
+</section>
+<!-- UPDATES -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Live Updates</title>
+
+<!-- Minecraftia Font -->
+<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        #3b3b3b,
+        #3b3b3b 10px,
+        #2e2e2e 10px,
+        #2e2e2e 20px
+    );
+    font-family: 'Minecraftia', sans-serif;
+    color: #fff;
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Main Box */
+.mc-box {
+    background: #1f1f1f;
+    border: 4px solid #8b8b8b;
+    box-shadow: inset 0 0 0 4px #3c3c3c;
+    padding: 20px;
+}
+
+/* Title */
+.mc-box h1 {
+    text-align: center;
+    color: #55ff55;
+    margin-bottom: 25px;
+    font-size: 18px;
+    text-shadow: 2px 2px #000;
+}
+
+/* News Card */
+.news {
+    background: #2a2a2a;
+    border: 3px solid #555;
+    padding: 15px;
+    margin-bottom: 18px;
+}
+
+.news h3 {
+    font-size: 12px;
+    color: #ffff55;
+    margin-bottom: 8px;
+}
+
+.news p {
+    font-size: 10px;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.news a {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px;
+    color: #55ffff;
+    text-decoration: none;
+}
+
+.news a:hover {
+    text-decoration: underline;
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    font-size: 10px;
+    color: #aaa;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 8px;
+    color: #aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="mc-box">
+        <h1>📰 Minecraft Live Updates</h1>
+
+        <div id="newsContainer">
+            <p class="loading">Loading updates...</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        Not affiliated with Mojang or Microsoft
+    </div>
+</div>
+
+<script>
+const RSS_URL = "https://www.minecraft.net/en-us/feeds/community-content/rss";
+
+async function loadMinecraftUpdates() {
+    const container = document.getElementById("newsContainer");
+    try {
+        const response = await fetch(
+            "https://api.rss2json.com/v1/api.json?rss_url=" + RSS_URL
+        );
+        const data = await response.json();
+
+        container.innerHTML = "";
+
+        data.items.slice(0, 6).forEach(item => {
+            const div = document.createElement("div");
+            div.className = "news";
+            div.innerHTML = `
+                <h3>${item.title}</h3>
+                <p>${item.description.replace(/<[^>]*>?/gm, "").substring(0, 160)}...</p>
+                <a href="${item.link}" target="_blank">Read More →</a>
+            `;
+            container.appendChild(div);
+        });
+
+    } catch (e) {
+        container.innerHTML = "<p class='loading'>Failed to load updates</p>";
+    }
+}
+
+loadMinecraftUpdates();
+setInterval(loadMinecraftUpdates, 1800000);
+</script>
+
+
+
+<!-- VERSIONS -->
+<section id="versions">
+<h2>⚙ Java vs Bedrock</h2>
+
+<div class="box">
+<h3>Java Edition</h3>
+<ul>
+<li>PC only</li>
+<li>Mods & snapshots</li>
+<li>Advanced redstone</li>
+</ul>
+</div>
+
+<div class="box">
+<h3>Bedrock Edition</h3>
+<ul>
+<li>Cross-platform</li>
+<li>Marketplace</li>
+<li>Optimized performance</li>
+</ul>
+<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/settings_versions_en_2_0_v11233953478506947189.png?w=660">
+</div>
+</section>
+
+<footer>
+© 2025 Minecraft Hub | Fan-Made Website
+</footer>
+
+<script>
+/* THEME SYSTEM */
+function setTheme(theme){
+  document.body.className = theme;
+  localStorage.setItem("mcTheme", theme);
+}
+
+/* LOAD SAVED THEME */
+const savedTheme = localStorage.getItem("mcTheme") || "overworld";
+document.body.className = savedTheme;
+</script>
+
+
+<!-- SERVERS -->
+<section id="servers">
+<h2>🌐 Minecraft Servers (Live Status)</h2>
+
+<h3>⭐ Popular Servers</h3>
+
+<div id="popularServers"></div>
+
+<h3>➕ Add Your Server</h3>
+<input id="serverInput" placeholder="example: play.example.net">
+<button class="mc-btn" onclick="addServer()">Check Server</button>
+
+<div id="customServers"></div>
+</section>
+
+<footer>
+© 2025 Minecraft Hub | Fan-made
+</footer>
+
+<script>
+/* THEME */
+function setTheme(theme){
+  document.body.className = theme;
+  localStorage.setItem("mcTheme", theme);
+}
+document.body.className = localStorage.getItem("mcTheme") || "overworld";
+
+/* SERVER STATUS */
+async function checkServer(ip, container){
+  const box=document.createElement("div");
+  box.className="server";
+  box.innerHTML=`<b>${ip}</b><p>Checking status...</p>`;
+  container.appendChild(box);
+
+  try{
+    const r=await fetch(`https://api.mcsrvstat.us/2/${ip}`);
+    const d=await r.json();
+
+    if(d.online){
+      box.innerHTML=`
+      <b>${ip}</b>
+      <p class="online">🟢 Online</p>
+      <p>Players: ${d.players.online} / ${d.players.max}</p>
+      <p>Version: ${d.version}</p>`;
+    }else{
+      box.innerHTML=`<b>${ip}</b><p class="offline">🔴 Offline</p>`;
+    }
+  }catch{
+    box.innerHTML=`<b>${ip}</b><p>⚠ Error loading status</p>`;
+  }
+}
+
+/* POPULAR SERVERS */
+const popular = [
+  "mc.hypixel.net",
+  "play.cubecraft.net",
+  "play.hivemc.com",
+  "play.mineplex.com"
+];
+
+popular.forEach(ip=>{
+  checkServer(ip, popularServers);
+});
+
+/* ADD SERVER */
+function addServer(){
+  const ip=serverInput.value.trim();
+  if(!ip) return;
+  checkServer(ip, customServers);
+  serverInput.value="";
+}
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft Hub</title>
+
+<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Minecraftia', Arial;
+  color:#fff;
+}
+
+/* THEMES */
+body.overworld{
+  background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
+  url("https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/wp-1759678964304.jpg");
+  background-size:cover;
+  background-attachment:fixed;
+}
+body.nether{
+  background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
+  url("https://minecraft6034.wordpress.com/wp-content/uploads/2025/09/screenshot_2025-09-04-20-43-20-7397320848285354765019.jpeg");
+  background-size:cover;
+  background-attachment:fixed;
+}
+
+/* HEADER */
+header{
+  background:#000;
+  padding:15px;
+  text-align:center;
+  position:sticky;
+  top:0;
+}
+nav a{color:#fff;margin:0 10px;text-decoration:none}
+
+/* BUTTON */
+.mc-btn{
+  background:#3fa93f;
+  border:3px solid #1e5e1e;
+  padding:8px 16px;
+  color:#fff;
+  cursor:pointer;
+  font-family:inherit;
+  box-shadow:0 4px #154315;
+  text-decoration:none;
+  display:inline-block;
+}
+.mc-btn:active{transform:translateY(3px);box-shadow:0 1px #154315}
+
+/* SECTIONS */
+section{
+  background:rgba(0,0,0,.7);
+  margin:20px;
+  padding:20px;
+  border-radius:10px;
+}
+
+.box{
+  border:2px solid #3fa93f;
+  padding:15px;
+  margin:15px 0;
+  border-radius:10px;
+}
+
+footer{text-align:center;padding:15px;background:#000}
+</style>
+</head>
+
+<body>
+
+
+<!-- DOWNLOADS -->
+<section id="downloads">
+<h2>⬇️ Minecraft Downloads</h2>
+
+<div class="box">
+<h3>🎮 Minecraft Launcher (Official)</h3>
+<p>
+The Minecraft Launcher allows you to play Java Edition, Bedrock Edition,
+snapshots, and manage versions.
+</p>
+<a class="mc-btn" href="https://www.minecraft.net/download" target="_blank">
+Download Launcher
+</a>
+</div>
+
+<div class="box">
+<h3>💻 Minecraft Java Edition</h3>
+<ul>
+<li>Windows, macOS, Linux</li>
+<li>Mods & custom servers</li>
+<li>Snapshots & full control</li>
+</ul>
+<a class="mc-btn" href="https://www.minecraft.net/store/minecraft-java-bedrock-edition-pc" target="_blank">
+Buy & Download Java
+</a>
+</div>
+
+<div class="box">
+<h3>📱 Minecraft Bedrock Edition</h3>
+<ul>
+<li>Windows 10/11</li>
+<li>Android & iOS</li>
+<li>PlayStation, Xbox, Switch</li>
+</ul>
+<a class="mc-btn" href="https://www.minecraft.net/get-minecraft" target="_blank">
+Get Bedrock Edition
+</a>
+</div>
+
+<div class="box">
+<h3>🧩 Mods & Resource Packs</h3>
+<p>Download mods and texture packs from trusted platforms.</p>
+
+<a class="mc-btn" href="https://www.curseforge.com/minecraft" target="_blank">
+CurseForge
+</a>
+
+<a class="mc-btn" href="https://modrinth.com" target="_blank">
+Modrinth
+</a>
+</div>
+
+<div class="box">
+<h3>⚠️ Important Notice</h3>
+<p>
+Always download Minecraft from official sources.
+Cracked or pirated versions are unsafe and illegal.
+</p>
+</div>
+
+</section>
+
+<footer>
+© 2025 Minecraft Hub | Fan-made Website
+</footer>
+
+<script>
+function setTheme(theme){
+  document.body.className = theme;
+  localStorage.setItem("mcTheme", theme);
+}
+document.body.className = localStorage.getItem("mcTheme") || "overworld";
+</script>
+
+</body>
+</html>
+
+
+</body>
+</html>
