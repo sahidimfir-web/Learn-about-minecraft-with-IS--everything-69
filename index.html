@@ -1,584 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Learn about minecraft with IS -everything</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worldopedia | Free encyclopedia</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff; --neon-purple: #7000ff; --neon-green: #39ff14;
+            --dark-bg: #050506; --card-bg: #111113; --glass: rgba(255,255,255,0.06);
+            --content-width: 94%;
+        }
 
-<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; }
+        body { background: var(--dark-bg); color: #eee; font-family: 'Outfit', system-ui, sans-serif; overflow-x: hidden; }
+        
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 65px; padding: 0 4%;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass); z-index: 5000;
+        }
 
-<style>
-body{
-  margin:0;
-  font-family:'Minecraftia', Arial;
-  color:#fff;
-  transition:background .5s;
-}
+        #menu-btn { display: flex; align-items: center; gap: 12px; cursor: pointer; z-index: 5001; }
+        .hamburger { width: 22px; height: 16px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .hamburger span { width: 100%; height: 2px; background: #fff; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* CROSS BUTTON TRANSFORM */
+        .sidebar-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .sidebar-active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+        .sidebar-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* THEMES */
-body.First{
-  background:
-    linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
-    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpvSsQ4brd1OU27E0Fr8j1XLyQkSXsIqt9h-_Z8KkPIwV94kT3U5-aPt4&s")";
-  background-size:cover;
-  background-attachment:fixed;
-}
+        /* --- SIDEBAR --- */
+        #sidebar {
+            position: fixed; top: 0; left: -320px; width: 310px; height: 100vh;
+            background: #0a0a0b; z-index: 4500; padding: 100px 30px; border-right: 1px solid var(--glass);
+            transition: transform 0.4s cubic-bezier(0,0,0.2,1);
+        }
+        #sidebar.active { transform: translateX(320px); }
 
-body.Second{
-  background:
-    linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
-    url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsALmnFfOFlgscJihrlmwGYu8iiwBaeWcWlprAfDqM-E5icRoQgfPv-dg&s");
-  background-size:cover;
-  background-attachment:fixed;
-}
+        /* --- SEARCH --- */
+        .search-wrap { position: relative; max-width: 1000px; margin: 40px auto; width: 92%; }
+        .main-search { 
+            width: 100%; padding: 20px 35px; border-radius: 60px; border: 1px solid var(--glass); 
+            background: #161618; color: #fff; font-size: 1.1rem; outline: none;
+        }
+        #suggest-box { 
+            position: absolute; width: 100%; background: #1a1a1c; border-radius: 20px; 
+            display: none; z-index: 6000; border: 1px solid var(--glass); margin-top: 10px; overflow: hidden;
+        }
 
-/* HEADER */
-header{
-  background:#000;
-  padding:15px;
-  text-align:center;
-  position:sticky;
-  top:0;
-}
+        /* --- GRID --- */
+        .wide-container { width: var(--content-width); margin: 0 auto; max-width: 1920px; }
+        .article-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(clamp(280px, 20vw, 400px), 1fr)); 
+            gap: 25px; padding: 20px 0 100px; 
+        }
 
-nav a{
-  color:#fff;
-  margin:0 10px;
-  text-decoration:none;
-}
+        .card { background: var(--card-bg); border-radius: 15px; overflow: hidden; cursor: pointer; border: 1px solid var(--glass); transition: 0.3s; height: 100%; }
+        .card:hover { border-color: var(--neon-blue); transform: translateY(-5px); }
+        .card img { width: 100%; height: 230px; object-fit: cover; background: #111; display: block; }
+        .card-body { padding: 22px; }
 
-/* BUTTON */
-.mc-btn{
-  background:#3fa93f;
-  border:3px solid #1e5e1e;
-  padding:8px 16px;
-  color:#fff;
-  cursor:pointer;
-  font-family:inherit;
-  box-shadow:0 4px #154315;
-}
-.mc-btn:active{
-  transform:translateY(3px);
-  box-shadow:0 1px #154315;
-}
+        /* --- DOSSIER VIEW --- */
+        #dossier-view { display: none; padding: 110px 0 80px; }
+        .dossier-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 40px; border-bottom: 1px solid var(--glass); padding-bottom: 25px; }
+        .wiki-body { font-size: clamp(1.1rem, 1.2vw, 1.35rem); line-height: 1.7; color: #d5d5d5; }
+        .wiki-body img { 
+            float: right; margin: 10px 0 30px 40px; border-radius: 12px; 
+            max-width: clamp(300px, 30vw, 500px); height: auto; border: 1px solid var(--glass); 
+        }
 
-/* THEME BUTTONS */
-.theme-box{
-  margin-top:10px;
-}
-.theme-btn{
-  margin:5px;
-}
+        .btn { padding: 12px 24px; border-radius: 8px; border: none; font-weight: 900; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-vault { background: var(--neon-green); color: #000; }
+        .btn-vault.active { background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green); }
 
-/* SECTIONS */
-section{
-  background:rgba(0,0,0,.7);
-  margin:20px;
-  padding:20px;
-  border-radius:10px;
-  animation:fade 1s;
-}
-@keyframes fade{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1}
-}
-
-.box{
-  border:2px solid #3fa93f;
-  padding:15px;
-  margin:15px 0;
-  border-radius:10px;
-}
-
-img{
-  max-width:100%;
-  border-radius:8px;
-  margin-top:10px;
-}
-
-footer{
-  text-align:center;
-  padding:15px;
-  background:#000;
-}
-</style>
+        @media (max-width: 900px) {
+            .wiki-body img { float: none; margin: 20px 0; max-width: 100%; }
+            .dossier-header h1 { font-size: 1.8rem; width: 100%; }
+        }
+    </style>
 </head>
-
 <body>
-
-<header>
-<h1>⛏ Minecraft Hub</h1>
 
 <nav>
-<a href="#about">About</a>
-<a href="#dimensions">Dimensions</a>
-<a href="#versions">Versions</a>
-<a href="launch minecraft.html">Launch minecraft</a>
-<a href="updates.html">updates</a>
-
+    <div id="menu-btn" onclick="toggleSidebar()">
+        <div class="hamburger"><span></span><span></span><span></span></div>
+        <span id="menu-text" style="font-size: 11px; font-weight: 900;">MENU</span>
+    </div>
+    <div style="font-weight:900; font-size:clamp(18px, 2vw, 24px); letter-spacing:4px; cursor:pointer;" onclick="location.hash=''">WORLDOPEDIA</div>
+    <div id="auth-zone"><button class="btn" style="background:var(--neon-blue)" onclick="signIn()">Authorize</button></div>
 </nav>
 
-<!-- THEME CHANGER -->
-<div class="theme-box">
-<button class="mc-btn theme-btn" onclick="setTheme('overworld')">🌿 Overworld</button>
-<button class="mc-btn theme-btn" onclick="setTheme('nether')">🔥 Nether</button>
-</div>
-</header>
+<aside id="sidebar">
+    <div id="op-info" style="display:none; margin-bottom:40px;">
+        <p style="font-size:10px; color:var(--neon-blue); letter-spacing:2px;">OPERATOR ID</p>
+        <h2 id="op-name" style="margin:5px 0;"></h2>
+        <p onclick="signOut()" style="font-size:9px; cursor:pointer; opacity:0.5;">[ DISCONNECT ]</p>
+    </div>
+    <p style="font-size:11px; font-weight:900; color:var(--neon-purple); margin-bottom:15px;">RECENT EXTRACTIONS</p>
+    <div id="history-list"></div>
+    <p style="font-size:11px; font-weight:900; color:var(--neon-green); margin:30px 0 15px;">SECURE VAULT</p>
+    <div id="vault-list"></div>
+</aside>
 
-<!-- ABOUT -->
-<section id="about">
-<h2>🧱 What is Minecraft?</h2>
-<p>
-Minecraft is a sandbox game by Mojang Studios where players explore,
-build, craft, and survive in a procedurally generated block world.
-</p>
-
-<div class="box">
-<h3>🌍 World Generation</h3>
-<p>
-Infinite worlds with biomes, villages, caves, oceans, and structures.
-</p>
-<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/wp-1759678964304.jpg">
-</div>
-</section>
-
-<!-- DIMENSIONS -->
-<section id="dimensions">
-<h2>🔥 Minecraft Dimensions</h2>
-
-<div class="box">
-<h3>🌿 Overworld</h3>
-<p>Main dimension for survival and building.</p>
-</div>
-
-<div class="box">
-<h3>🔥 Nether</h3>
-<p>Dangerous lava-filled dimension with unique mobs and resources.</p>
-<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/09/screenshot_2025-09-04-20-43-20-7397320848285354765019.jpeg">
-</div>
-
-<div class="box">
-<h3>⚫ The End</h3>
-<p>End-game dimension where the Ender Dragon lives.</p>
-</div>
-</section>
-<!-- UPDATES -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minecraft Live Updates</title>
-
-<!-- Minecraftia Font -->
-<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: repeating-linear-gradient(
-        45deg,
-        #3b3b3b,
-        #3b3b3b 10px,
-        #2e2e2e 10px,
-        #2e2e2e 20px
-    );
-    font-family: 'Minecraftia', sans-serif;
-    color: #fff;
-}
-
-/* Container */
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-/* Main Box */
-.mc-box {
-    background: #1f1f1f;
-    border: 4px solid #8b8b8b;
-    box-shadow: inset 0 0 0 4px #3c3c3c;
-    padding: 20px;
-}
-
-/* Title */
-.mc-box h1 {
-    text-align: center;
-    color: #55ff55;
-    margin-bottom: 25px;
-    font-size: 18px;
-    text-shadow: 2px 2px #000;
-}
-
-/* News Card */
-.news {
-    background: #2a2a2a;
-    border: 3px solid #555;
-    padding: 15px;
-    margin-bottom: 18px;
-}
-
-.news h3 {
-    font-size: 12px;
-    color: #ffff55;
-    margin-bottom: 8px;
-}
-
-.news p {
-    font-size: 10px;
-    line-height: 1.6;
-    color: #e0e0e0;
-}
-
-.news a {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 10px;
-    color: #55ffff;
-    text-decoration: none;
-}
-
-.news a:hover {
-    text-decoration: underline;
-}
-
-/* Loading */
-.loading {
-    text-align: center;
-    font-size: 10px;
-    color: #aaa;
-}
-
-/* Footer */
-.footer {
-    text-align: center;
-    margin-top: 25px;
-    font-size: 8px;
-    color: #aaa;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-    <div class="mc-box">
-        <h1>📰 Minecraft Live Updates</h1>
-
-        <div id="newsContainer">
-            <p class="loading">Loading updates...</p>
+<main id="home-view" class="wide-container">
+    <div style="padding: 120px 0 40px; text-align:center;">
+        <h1 style="font-size: clamp(40px, 8vw, 100px); font-weight:900; line-height:0.9;">Worldopedia</h1>
+        <div class="search-wrap">
+            <input type="text" id="mainSearch" class="main-search" placeholder="Query the global archives..." autocomplete="off">
+            <div id="suggest-box"></div>
         </div>
     </div>
+    <div class="article-grid" id="latest-grid"></div>
+</main>
 
-    <div class="footer">
-        Not affiliated with Mojang or Microsoft
+<main id="dossier-view" class="wide-container">
+    <div class="dossier-header">
+        <h1 id="dos-title" style="font-size: clamp(2rem, 4vw, 4rem); font-weight:900;"></h1>
+        <button id="vault-btn" class="btn btn-vault" onclick="toggleVault()">Vault +</button>
     </div>
-</div>
+    <div id="dos-content" class="wiki-body"></div>
+</main>
 
 <script>
-const RSS_URL = "https://www.minecraft.net/en-us/feeds/community-content/rss";
+    const cache = new Map();
+    let activeUser = localStorage.getItem('worldo_user');
 
-async function loadMinecraftUpdates() {
-    const container = document.getElementById("newsContainer");
-    try {
-        const response = await fetch(
-            "https://api.rss2json.com/v1/api.json?rss_url=" + RSS_URL
-        );
-        const data = await response.json();
+    window.addEventListener('hashchange', handleRoute);
+    window.onload = () => { handleRoute(); renderSidebar(); if(activeUser) updateAuthUI(); };
 
-        container.innerHTML = "";
+    function handleRoute() {
+        const hash = window.location.hash;
+        if (hash.startsWith('#dossier/')) {
+            const title = decodeURIComponent(hash.replace('#dossier/', ''));
+            fetchArticle(title);
+        } else {
+            document.title = "Worldopedia | Global Intelligence";
+            showHome();
+        }
+    }
 
-        data.items.slice(0, 6).forEach(item => {
-            const div = document.createElement("div");
-            div.className = "news";
-            div.innerHTML = `
-                <h3>${item.title}</h3>
-                <p>${item.description.replace(/<[^>]*>?/gm, "").substring(0, 160)}...</p>
-                <a href="${item.link}" target="_blank">Read More →</a>
-            `;
-            container.appendChild(div);
+    function showHome() {
+        document.getElementById('home-view').style.display = 'block';
+        document.getElementById('dossier-view').style.display = 'none';
+        document.getElementById('menu-text').innerText = "MENU";
+        document.getElementById('sidebar').classList.remove('active');
+        document.getElementById('menu-btn').classList.remove('sidebar-active');
+        loadFeed();
+    }
+
+    async function fetchArticle(title) {
+        document.title = `${title.replace(/_/g, ' ')} | Worldopedia`;
+        document.getElementById('home-view').style.display = 'none';
+        document.getElementById('dossier-view').style.display = 'block';
+        document.getElementById('dos-title').innerText = title.replace(/_/g, ' ');
+        document.getElementById('dos-content').innerHTML = "Extracting data...";
+        document.getElementById('suggest-box').style.display = 'none';
+        
+        checkVaultStatus(title);
+        window.scrollTo(0,0);
+
+        if(cache.has(title)) return renderContent(cache.get(title));
+
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/html/${encodeURIComponent(title)}`);
+        const html = await res.text();
+        cache.set(title, html);
+        renderContent(html);
+        saveHistory(title);
+    }
+
+    function renderContent(html) {
+        const target = document.getElementById('dos-content');
+        target.innerHTML = html;
+        target.querySelectorAll('img').forEach(img => {
+            let src = img.getAttribute('src');
+            if (src?.startsWith('./')) src = 'https://en.wikipedia.org/api/rest_v1/page/pdf/' + src.replace('./', '');
+            if (src?.startsWith('//')) src = 'https:' + src;
+            img.src = src;
+            img.setAttribute('referrerpolicy', 'no-referrer');
         });
-
-    } catch (e) {
-        container.innerHTML = "<p class='loading'>Failed to load updates</p>";
+        target.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href?.startsWith('./')) link.href = `#dossier/${href.replace('./', '')}`;
+        });
     }
-}
 
-loadMinecraftUpdates();
-setInterval(loadMinecraftUpdates, 1800000);
-</script>
-
-
-
-<!-- VERSIONS -->
-<section id="versions">
-<h2>⚙ Java vs Bedrock</h2>
-
-<div class="box">
-<h3>Java Edition</h3>
-<ul>
-<li>PC only</li>
-<li>Mods & snapshots</li>
-<li>Advanced redstone</li>
-</ul>
-</div>
-
-<div class="box">
-<h3>Bedrock Edition</h3>
-<ul>
-<li>Cross-platform</li>
-<li>Marketplace</li>
-<li>Optimized performance</li>
-</ul>
-<img src="https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/settings_versions_en_2_0_v11233953478506947189.png?w=660">
-</div>
-</section>
-
-<footer>
-© 2025 Minecraft Hub | Fan-Made Website
-</footer>
-
-<script>
-/* THEME SYSTEM */
-function setTheme(theme){
-  document.body.className = theme;
-  localStorage.setItem("mcTheme", theme);
-}
-
-/* LOAD SAVED THEME */
-const savedTheme = localStorage.getItem("mcTheme") || "overworld";
-document.body.className = savedTheme;
-</script>
-
-
-<!-- SERVERS -->
-<section id="servers">
-<h2>🌐 Minecraft Servers (Live Status)</h2>
-
-<h3>⭐ Popular Servers</h3>
-
-<div id="popularServers"></div>
-
-<h3>➕ Add Your Server</h3>
-<input id="serverInput" placeholder="example: play.example.net">
-<button class="mc-btn" onclick="addServer()">Check Server</button>
-
-<div id="customServers"></div>
-</section>
-
-<footer>
-© 2025 Minecraft Hub | Fan-made
-</footer>
-
-<script>
-/* THEME */
-function setTheme(theme){
-  document.body.className = theme;
-  localStorage.setItem("mcTheme", theme);
-}
-document.body.className = localStorage.getItem("mcTheme") || "overworld";
-
-/* SERVER STATUS */
-async function checkServer(ip, container){
-  const box=document.createElement("div");
-  box.className="server";
-  box.innerHTML=`<b>${ip}</b><p>Checking status...</p>`;
-  container.appendChild(box);
-
-  try{
-    const r=await fetch(`https://api.mcsrvstat.us/2/${ip}`);
-    const d=await r.json();
-
-    if(d.online){
-      box.innerHTML=`
-      <b>${ip}</b>
-      <p class="online">🟢 Online</p>
-      <p>Players: ${d.players.online} / ${d.players.max}</p>
-      <p>Version: ${d.version}</p>`;
-    }else{
-      box.innerHTML=`<b>${ip}</b><p class="offline">🔴 Offline</p>`;
+    function toggleVault() {
+        if(!activeUser) return signIn();
+        const title = window.location.hash.replace('#dossier/', '');
+        let v = JSON.parse(localStorage.getItem(`worldo_v_${activeUser}`) || '[]');
+        v = v.includes(title) ? v.filter(t => t !== title) : [title, ...v];
+        localStorage.setItem(`worldo_v_${activeUser}`, JSON.stringify(v));
+        checkVaultStatus(title);
+        renderSidebar();
     }
-  }catch{
-    box.innerHTML=`<b>${ip}</b><p>⚠ Error loading status</p>`;
-  }
-}
 
-/* POPULAR SERVERS */
-const popular = [
-  "mc.hypixel.net",
-  "play.cubecraft.net",
-  "play.hivemc.com",
-  "play.mineplex.com"
-];
+    function checkVaultStatus(title) {
+        const v = activeUser ? JSON.parse(localStorage.getItem(`worldo_v_${activeUser}`) || '[]') : [];
+        const btn = document.getElementById('vault-btn');
+        btn.innerText = v.includes(title) ? "IN VAULT" : "VAULT +";
+        btn.classList.toggle('active', v.includes(title));
+    }
 
-popular.forEach(ip=>{
-  checkServer(ip, popularServers);
-});
+    function toggleSidebar() {
+        const side = document.getElementById('sidebar');
+        if (!side.classList.contains('active') && window.location.hash) {
+            window.location.hash = ''; return;
+        }
+        side.classList.toggle('active');
+        document.getElementById('menu-btn').classList.toggle('sidebar-active');
+        document.getElementById('menu-text').innerText = side.classList.contains('active') ? "CLOSE" : (window.location.hash ? "BACK" : "MENU");
+    }
 
-/* ADD SERVER */
-function addServer(){
-  const ip=serverInput.value.trim();
-  if(!ip) return;
-  checkServer(ip, customServers);
-  serverInput.value="";
-}
+    async function loadFeed() {
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/featured/${new Date().toISOString().split('T')[0].replace(/-/g, '/')}`);
+        const data = await res.json();
+        document.getElementById('latest-grid').innerHTML = data.mostread.articles.slice(0, 16).map(a => `
+            <div class="card" onclick="location.hash='#dossier/${a.titles.canonical}'">
+                <img src="${a.thumbnail ? a.thumbnail.source : ''}" loading="lazy">
+                <div class="card-body">
+                    <h3 style="margin-bottom:10px;">${a.titles.normalized}</h3>
+                    <p style="font-size:13px; opacity:0.6; line-height:1.4;">${a.extract}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('mainSearch').addEventListener('input', async (e) => {
+        const val = e.target.value.trim();
+        if(val.length < 2) return;
+        const res = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&format=json&origin=*&search=${val}`);
+        const data = await res.json();
+        document.getElementById('suggest-box').innerHTML = data[1].map(t => `<div style="padding:15px 25px; cursor:pointer; border-bottom:1px solid var(--glass);" onclick="location.hash='#dossier/${t}'">${t}</div>`).join('');
+        document.getElementById('suggest-box').style.display = 'block';
+    });
+
+    function signIn() {
+        const n = prompt("Operator Codename:");
+        if(n) { localStorage.setItem('worldo_user', n); activeUser = n; updateAuthUI(); renderSidebar(); }
+    }
+    function signOut() { localStorage.removeItem('worldo_user'); location.reload(); }
+    function updateAuthUI() {
+        document.getElementById('auth-zone').innerHTML = `<span style="font-size:11px; color:var(--neon-blue); font-weight:900;">OP: ${activeUser.toUpperCase()}</span>`;
+        document.getElementById('op-info').style.display = 'block';
+        document.getElementById('op-name').innerText = activeUser;
+    }
+    function saveHistory(t) {
+        let h = JSON.parse(localStorage.getItem('worldo_h') || '[]');
+        h = [t, ...h.filter(x => x !== t)].slice(0, 12);
+        localStorage.setItem('worldo_h', JSON.stringify(h));
+        renderSidebar();
+    }
+    function renderSidebar() {
+        const h = JSON.parse(localStorage.getItem('worldo_h') || '[]');
+        document.getElementById('history-list').innerHTML = h.map(t => `<div style="padding:8px 0; font-size:13px; cursor:pointer;" onclick="location.hash='#dossier/${t}'">${t.replace(/_/g, ' ')}</div>`).join('');
+        if(activeUser) {
+            const v = JSON.parse(localStorage.getItem(`worldo_v_${activeUser}`) || '[]');
+            document.getElementById('vault-list').innerHTML = v.map(t => `<div style="padding:8px 0; font-size:13px; cursor:pointer; color:var(--neon-green);" onclick="location.hash='#dossier/${t}'">🔒 ${t.replace(/_/g, ' ')}</div>`).join('');
+        }
+    }
 </script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Minecraft Hub</title>
-
-<link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
-<style>
-body{
-  margin:0;
-  font-family:'Minecraftia', Arial;
-  color:#fff;
-}
-
-/* THEMES */
-body.overworld{
-  background:linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.4)),
-  url("https://minecraft6034.wordpress.com/wp-content/uploads/2025/10/wp-1759678964304.jpg");
-  background-size:cover;
-  background-attachment:fixed;
-}
-body.nether{
-  background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),
-  url("https://minecraft6034.wordpress.com/wp-content/uploads/2025/09/screenshot_2025-09-04-20-43-20-7397320848285354765019.jpeg");
-  background-size:cover;
-  background-attachment:fixed;
-}
-
-/* HEADER */
-header{
-  background:#000;
-  padding:15px;
-  text-align:center;
-  position:sticky;
-  top:0;
-}
-nav a{color:#fff;margin:0 10px;text-decoration:none}
-
-/* BUTTON */
-.mc-btn{
-  background:#3fa93f;
-  border:3px solid #1e5e1e;
-  padding:8px 16px;
-  color:#fff;
-  cursor:pointer;
-  font-family:inherit;
-  box-shadow:0 4px #154315;
-  text-decoration:none;
-  display:inline-block;
-}
-.mc-btn:active{transform:translateY(3px);box-shadow:0 1px #154315}
-
-/* SECTIONS */
-section{
-  background:rgba(0,0,0,.7);
-  margin:20px;
-  padding:20px;
-  border-radius:10px;
-}
-
-.box{
-  border:2px solid #3fa93f;
-  padding:15px;
-  margin:15px 0;
-  border-radius:10px;
-}
-
-footer{text-align:center;padding:15px;background:#000}
-</style>
-</head>
-
-<body>
-
-
-<!-- DOWNLOADS -->
-<section id="downloads">
-<h2>⬇️ Minecraft Downloads</h2>
-
-<div class="box">
-<h3>🎮 Minecraft Launcher (Official)</h3>
-<p>
-The Minecraft Launcher allows you to play Java Edition, Bedrock Edition,
-snapshots, and manage versions.
-</p>
-<a class="mc-btn" href="https://www.minecraft.net/download" target="_blank">
-Download Launcher
-</a>
-</div>
-
-<div class="box">
-<h3>💻 Minecraft Java Edition</h3>
-<ul>
-<li>Windows, macOS, Linux</li>
-<li>Mods & custom servers</li>
-<li>Snapshots & full control</li>
-</ul>
-<a class="mc-btn" href="https://www.minecraft.net/store/minecraft-java-bedrock-edition-pc" target="_blank">
-Buy & Download Java
-</a>
-</div>
-
-<div class="box">
-<h3>📱 Minecraft Bedrock Edition</h3>
-<ul>
-<li>Windows 10/11</li>
-<li>Android & iOS</li>
-<li>PlayStation, Xbox, Switch</li>
-</ul>
-<a class="mc-btn" href="https://www.minecraft.net/get-minecraft" target="_blank">
-Get Bedrock Edition
-</a>
-</div>
-
-<div class="box">
-<h3>🧩 Mods & Resource Packs</h3>
-<p>Download mods and texture packs from trusted platforms.</p>
-
-<a class="mc-btn" href="https://www.curseforge.com/minecraft" target="_blank">
-CurseForge
-</a>
-
-<a class="mc-btn" href="https://modrinth.com" target="_blank">
-Modrinth
-</a>
-</div>
-
-<div class="box">
-<h3>⚠️ Important Notice</h3>
-<p>
-Always download Minecraft from official sources.
-Cracked or pirated versions are unsafe and illegal.
-</p>
-</div>
-
-</section>
-
-<footer>
-© 2025 Minecraft Hub | Fan-made Website
-</footer>
-
-<script>
-function setTheme(theme){
-  document.body.className = theme;
-  localStorage.setItem("mcTheme", theme);
-}
-document.body.className = localStorage.getItem("mcTheme") || "overworld";
-</script>
-
-</body>
-</html>
-
-
 </body>
 </html>
